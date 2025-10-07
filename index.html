@@ -1,0 +1,135 @@
+<!DOCTYPE html><html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>مدرسة ثانوية فم الذهب</title>
+  <style>
+    body { font-family: 'Cairo', sans-serif; background: #f4f6f9; margin:0; padding:0; }
+    header { background:#004d40; color:#fff; padding:20px; text-align:center; }
+    nav { background: #00695c; display:flex; justify-content:center; flex-wrap:wrap; }
+    nav a { color:#fff; padding:14px 20px; text-decoration:none; display:block; }
+    nav a:hover { background:#004d40; }
+    section { padding:20px; margin:15px; background:#fff; border-radius:10px; box-shadow:0 2px 5px rgba(0,0,0,0.1); }
+    h2 { color:#004d40; }
+    .grades { display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:15px; }
+    .grade-card { background:#e0f2f1; padding:15px; border-radius:8px; text-align:center; }
+    .grade-card a { text-decoration:none; color:#004d40; font-weight:bold; }
+    .subject { margin-bottom:15px; }
+    .activities { padding:10px; margin-top:5px; background:#e0f2f1; border-radius:5px; display:none; }
+    .activity-item { display:flex; justify-content:space-between; align-items:center; margin-bottom:5px; }
+    .toggle { background:#004d40; color:white; border:none; padding:10px; width:100%; text-align:left; cursor:pointer; border-radius:5px; margin-bottom:5px; }
+    .toggle:hover { background:#00695c; }
+    .login, .admin-panel { max-width:600px; margin:20px auto; background:#fff; padding:20px; border-radius:10px; box-shadow:0 2px 5px rgba(0,0,0,0.2); }
+    input[type=password], input[type=text], select { width:100%; padding:10px; margin:10px 0; border-radius:5px; border:1px solid #ccc; }
+    button.admin-btn { padding:10px 20px; border:none; border-radius:5px; background:#004d40; color:white; cursor:pointer; }
+    button.admin-btn:hover { background:#00695c; }
+    .delete-btn, .edit-btn { border:none; padding:3px 7px; border-radius:5px; cursor:pointer; }
+    .delete-btn { background:#c62828; color:white; margin-left:5px; }
+    .edit-btn { background:#1565c0; color:white; }
+  </style>
+</head>
+<body><header>
+  <h1>مدرسة ثانوية فم الذهب</h1>
+  <p>نحو مستقبل مشرق بالعلم والمعرفة</p>
+</header><button onclick="showLogin()" style="position:fixed;top:10px;left:10px;background:#004d40;color:white;padding:10px 15px;border:none;border-radius:50px;cursor:pointer;z-index:1000;">🔑 تسجيل دخول المدير</button>
+
+<nav>
+  <a href="#grade7">الصف السابع</a>
+  <a href="#grade8">الصف الثامن</a>
+  <a href="#grade9">الصف التاسع</a>
+  <a href="#grade10">الصف العاشر</a>
+  <a href="#grade11">الصف الحادي عشر</a>
+  <a href="#grade12">الصف الثاني عشر</a>
+</nav><section id="grade7"><h2>الصف السابع</h2></section>
+<section id="grade8"><h2>الصف الثامن</h2></section>
+<section id="grade9"><h2>الصف التاسع</h2></section>
+<section id="grade10"><h2>الصف العاشر</h2></section>
+<section id="grade11"><h2>الصف الحادي عشر</h2></section>
+<section id="grade12"><h2>الصف الثاني عشر</h2></section><div class="login" id="loginDiv" style="display:none;">
+  <h2>تسجيل دخول المدير</h2>
+  <input type="password" id="password" placeholder="أدخل كلمة المرور">
+  <button class="admin-btn" onclick="login()">دخول</button>
+</div><div class="admin-panel" id="adminDiv" style="display:none;">
+  <h2>لوحة الإدارة</h2>
+  <input type="text" id="activityInput" placeholder="أدخل اسم النشاط أو موعد الامتحان">
+  <select id="gradeSelect">
+    <option value="grade7">الصف السابع</option>
+    <option value="grade8">الصف الثامن</option>
+    <option value="grade9">الصف التاسع</option>
+    <option value="grade10">الصف العاشر</option>
+    <option value="grade11">الصف الحادي عشر</option>
+    <option value="grade12">الصف الثاني عشر</option>
+  </select>
+  <select id="subjectSelect">
+    <option value="العربي">العربي</option>
+    <option value="الرياضيات">الرياضيات</option>
+    <option value="الإنجليزي">الإنجليزي</option>
+  </select>
+  <button class="admin-btn" onclick="addActivity()">إضافة</button>
+</div><script>
+const grades = ['grade7','grade8','grade9','grade10','grade11','grade12'];
+const subjects = ['العربي','الرياضيات','الإنجليزي'];
+
+// إنشاء أقسام لكل صف وموضوع
+grades.forEach(g => {
+  const section = document.getElementById(g);
+  subjects.forEach(s => {
+    const div = document.createElement('div');
+    div.className = 'subject';
+    div.dataset.grade = g;
+    div.dataset.subject = s;
+    const button = document.createElement('button');
+    button.className = 'toggle';
+    button.textContent = s;
+    const activitiesDiv = document.createElement('div');
+    activitiesDiv.className = 'activities';
+    activitiesDiv.id = `activities-${g}-${s}`;
+    button.addEventListener('click',()=>{
+      activitiesDiv.style.display = activitiesDiv.style.display === 'block' ? 'none' : 'block';
+    });
+    div.appendChild(button);
+    div.appendChild(activitiesDiv);
+    section.appendChild(div);
+  });
+});
+
+const correctPassword = 'admin123';
+function showLogin(){
+  const loginDiv = document.getElementById('loginDiv');
+  loginDiv.style.display = loginDiv.style.display==='block'?'none':'block';
+}
+function login(){
+  const pass = document.getElementById('password').value;
+  if(pass===correctPassword){
+    document.getElementById('loginDiv').style.display='none';
+    document.getElementById('adminDiv').style.display='block';
+  } else alert('كلمة المرور خاطئة');
+}
+function addActivity(){
+  const activity = document.getElementById('activityInput').value.trim();
+  const grade = document.getElementById('gradeSelect').value;
+  const subject = document.getElementById('subjectSelect').value;
+  if(activity!==''){
+    const activitiesDiv = document.getElementById(`activities-${grade}-${subject}`);
+    const div = document.createElement('div');
+    div.className='activity-item';
+    div.textContent=activity;
+    const editBtn=document.createElement('button');
+    editBtn.className='edit-btn';
+    editBtn.textContent='✏️';
+    editBtn.onclick=()=>{
+      const newText=prompt('عدل النص:',div.firstChild.textContent);
+      if(newText!==null) div.firstChild.textContent=newText;
+    };
+    const deleteBtn=document.createElement('button');
+    deleteBtn.className='delete-btn';
+    deleteBtn.textContent='❌';
+    deleteBtn.onclick=()=>div.remove();
+    div.appendChild(editBtn);
+    div.appendChild(deleteBtn);
+    activitiesDiv.appendChild(div);
+    document.getElementById('activityInput').value='';
+  }
+}
+</script></body>
+</html>
